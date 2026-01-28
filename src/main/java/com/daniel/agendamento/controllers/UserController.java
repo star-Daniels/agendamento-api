@@ -1,8 +1,9 @@
 package com.daniel.agendamento.controllers;
-import com.daniel.agendamento.dto.UserResponseDTO;
-import com.daniel.agendamento.entities.User;
 
+import com.daniel.agendamento.dtos.user.UserRequestDTO;
+import com.daniel.agendamento.dtos.user.UserResponseDTO;
 import com.daniel.agendamento.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,19 +18,9 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @PostMapping
-    public ResponseEntity<UserResponseDTO> register(@RequestBody User user) {
-
-        User created = userService.register(user);
-
-        UserResponseDTO dto = new UserResponseDTO(
-                created.getId(),
-                created.getName(),
-                created.getEmail(),
-                created.getRole()
-        );
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO dto) {
+        UserResponseDTO created = userService.register(dto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 }

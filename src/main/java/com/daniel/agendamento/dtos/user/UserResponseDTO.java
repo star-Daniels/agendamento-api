@@ -1,4 +1,4 @@
-package com.daniel.agendamento.dto;
+package com.daniel.agendamento.dtos.user;
 
 import com.daniel.agendamento.enums.Role;
 
