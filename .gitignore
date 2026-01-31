@@ -6,8 +6,10 @@ target/
 build/
 *.log
 
-# Ignorar arquivos de configuração
-*.properties
+# ===============================
+# Spring Boot
+# ===============================
+application.properties
 
 # ===============================
 # Maven
@@ -15,6 +17,15 @@ build/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+# ===============================
+# IntelliJ IDEA
+# ===============================
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
 
 # ===============================
 # Spring Tools Suite (STS)
@@ -26,15 +37,6 @@ build/
 .settings
 .springBeans
 .sts4-cache
-
-# ===============================
-# IntelliJ IDEA
-# ===============================
-.idea/
-*.iws
-*.iml
-*.ipr
-out/
 
 # ===============================
 # NetBeans
