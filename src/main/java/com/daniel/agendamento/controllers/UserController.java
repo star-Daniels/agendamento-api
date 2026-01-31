@@ -18,9 +18,5 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid UserRequestDTO dto) {
-        UserResponseDTO created = userService.register(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
-    }
+
 }

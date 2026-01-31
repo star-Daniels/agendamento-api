@@ -1,8 +1,9 @@
 package com.daniel.agendamento.controllers;
 
+import com.daniel.agendamento.dtos.auth.AuthResponseDTO;
 import com.daniel.agendamento.dtos.auth.LoginRequestDTO;
 import com.daniel.agendamento.dtos.auth.RegisterRequestDTO;
-import com.daniel.agendamento.dtos.AuthResponseDTO;
+import com.daniel.agendamento.dtos.user.UserResponseDTO;
 import com.daniel.agendamento.entities.User;
 import com.daniel.agendamento.security.JwtService;
 import com.daniel.agendamento.services.UserService;
@@ -32,29 +33,46 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> register(@RequestBody @Valid RegisterRequestDTO dto) {
 
-        User user = new User();
-        user.setName(dto.name());
-        user.setEmail(dto.email());
-        user.setPassword(dto.password());
 
-        User created = userService.register(user);
+        UserResponseDTO created = userService.register(dto);
 
         String token = jwtService.generateToken(created.getEmail());
 
-        return ResponseEntity.ok(new AuthResponseDTO(token));
+        return ResponseEntity.ok(
+                new AuthResponseDTO(
+                        token,
+                        created.getId(),
+                        created.getName(),
+                        created.getEmail(),
+                        created.getRole().name()
+                )
+        );
     }
 
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@RequestBody @Valid LoginRequestDTO dto) {
+    public ResponseEntity<AuthResponseDTO> login(
+            @RequestBody @Valid LoginRequestDTO dto) {
 
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        dto.getEmail(),
+                        dto.getPassword()
+                )
+        );
 
-        authenticationManager.authenticate(authToken);
+        User user = userService.findByEmail(dto.getEmail());
 
-        String token = jwtService.generateToken(dto.email());
+        String token = jwtService.generateToken(user.getEmail());
 
-        return ResponseEntity.ok(new AuthResponseDTO(token));
+        return ResponseEntity.ok(
+                new AuthResponseDTO(
+                        token,
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getRole().name()
+                )
+        );
     }
 }

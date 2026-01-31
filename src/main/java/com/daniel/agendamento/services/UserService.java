@@ -1,6 +1,6 @@
 package com.daniel.agendamento.services;
 
-import com.daniel.agendamento.dtos.user.UserRequestDTO;
+import com.daniel.agendamento.dtos.auth.RegisterRequestDTO;
 import com.daniel.agendamento.dtos.user.UserResponseDTO;
 import com.daniel.agendamento.entities.User;
 import com.daniel.agendamento.enums.Role;
@@ -20,7 +20,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserResponseDTO register(UserRequestDTO dto) {
+    public UserResponseDTO register(RegisterRequestDTO dto) {
 
         if (userRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email já cadastrado");
@@ -40,5 +40,9 @@ public class UserService {
                 saved.getEmail(),
                 saved.getRole()
         );
+    }
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
     }
 }

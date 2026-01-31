@@ -5,6 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -45,12 +46,19 @@ public class JwtService {
                 .getSubject();
     }
 
-    public boolean isTokenValid(String token) {
-        try {
-            getEmailFromToken(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    private boolean isTokenExpired(String token) {
+        Date expirationDate = Jwts.parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getExpiration();
+
+        return expirationDate.before(new Date());
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        String email = getEmailFromToken(token);
+        return email.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 }
