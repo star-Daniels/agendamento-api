@@ -32,7 +32,7 @@ public class AdminInitializer {
                 userRepository.save(admin);
 
                 System.out.println(" ADMIN criado com sucesso");
-            =
+            }
         };
     }
 }
