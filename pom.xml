@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.daniel</groupId>
-	<artifactId>agendamento</artifactId>
+	<artifactId>CRUD</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>agendamento</name>
 	<description>agendamento api</description>
